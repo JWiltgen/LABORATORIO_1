@@ -35,18 +35,26 @@ Desenvolver um sistema completo de gerenciamento que permita:
 ```
 Desafio_Laboratorio/
 │
-├── src/                    # Código fonte
-│   ├── App.java           # Classe principal
-│   ├── Loja.java          # Classe Loja
-│   ├── Produto.java       # Classe Produto
-│   ├── Endereco.java      # Classe Endereco
-│   └── Data.java          # Classe Data
+├── src/                          # Código fonte
+│   ├── Principal.java            # Classe principal (executa validações)
+│   ├── ExecutarValidacoes.java   # Scripts de validação integrados
+│   ├── Loja.java                 # Classe Loja (com Endereco e Data)
+│   ├── Produto.java              # Classe Produto (com Data de validade)
+│   ├── Endereco.java             # Classe Endereco
+│   ├── Data.java                 # Classe Data
+│   ├── App.java                  # Classe App (original)
+│   │
+│   └── validation_Scripts/       # Scripts de validação originais
+│       ├── ValidadorEtapa1.java
+│       ├── ValidadorEtapa2.java
+│       ├── ValidadorEtapa3.java
+│       └── ValidadorEtapa4.java
 │
-├── lib/                    # Dependências externas
+├── lib/                          # Dependências externas
 │
-├── bin/                    # Arquivos compilados (.class)
+├── bin/                          # Arquivos compilados (.class)
 │
-└── README.md              # Documentação do projeto
+└── README.md                     # Documentação do projeto
 ```
 
 ## 🔧 Classes Implementadas
@@ -60,11 +68,13 @@ Representa uma loja no shopping.
 - `nome` (String)
 - `quantidadeFuncionarios` (int)
 - `salarioBaseFuncionario` (double)
+- `endereco` (Endereco) - **Novo na Etapa 2**
+- `dataFundacao` (Data) - **Novo na Etapa 2**
 
 **Métodos:**
-- 2 construtores (um completo e outro que define salário como -1)
+- 2 construtores (recebem também endereco e dataFundacao)
 - Getters e setters para todos os atributos
-- `toString()`: retorna representação em String da loja
+- `toString()`: retorna representação completa da loja
 - `gastosComSalario()`: calcula o gasto total com salários
 - `tamanhoDaLoja()`: retorna 'P' (pequena), 'M' (média) ou 'G' (grande)
 
@@ -74,11 +84,13 @@ Representa um produto vendido nas lojas.
 **Atributos:**
 - `nome` (String)
 - `preco` (double)
+- `dataValidade` (Data) - **Novo na Etapa 2**
 
 **Métodos:**
-- Construtor com todos os parâmetros
+- Construtor com todos os parâmetros (incluindo data de validade)
 - Getters e setters
 - `toString()`: retorna representação em String do produto
+- `estaVencido(Data data)`: verifica se o produto está vencido - **Novo na Etapa 2**
 
 #### 3. 📍 **Endereco** (`Endereco.java`)
 Representa um endereço.
@@ -113,6 +125,41 @@ Representa uma data com validação.
 
 **Validação:** Datas inválidas são automaticamente ajustadas para 1/1/2000 com mensagem de erro.
 
+#### 5. 🎮 **Principal** (`Principal.java`) - **Novo na Etapa 2**
+Classe principal com menu interativo para o usuário.
+
+**Funcionalidades:**
+- Menu interativo com 3 opções:
+  - (1) Criar uma loja
+  - (2) Criar um produto
+  - (3) Sair
+- Solicita todas as informações ao usuário via teclado
+- Valida opções inválidas
+- Verifica se produto está vencido na data 20/10/2023
+- Exibe informações da loja criada
+
+---
+
+### 📦 Etapa 2 - Associação entre Classes
+
+Nesta etapa, foram implementadas as seguintes associações:
+
+✅ **Loja** agora possui:
+- Atributo `endereco` (tipo Endereco)
+- Atributo `dataFundacao` (tipo Data)
+- Construtores atualizados para receber esses novos atributos
+
+✅ **Produto** agora possui:
+- Atributo `dataValidade` (tipo Data)
+- Construtor atualizado para receber data de validade
+- Método `estaVencido(Data data)` para verificar validade
+
+✅ **Classe Principal e ExecutarValidacoes** criadas:
+- Principal redireciona para ExecutarValidacoes
+- ExecutarValidacoes executa scripts de validação automaticamente
+- Valida todas as funcionalidades implementadas nas Etapas 1 e 2
+- Exibe resultados formatados com indicadores [OK]/[NOK]
+
 ---
 
 ## 🚀 Como Executar
@@ -136,16 +183,79 @@ Representa uma data com validação.
    javac src/*.java
    ```
 
-3. **Execute a classe principal**
+3. **Execute a classe principal (executa validações automaticamente)**
    ```bash
-   java -cp src App
+   java -cp bin Principal
+   ```
+   
+   _Ou execute diretamente o validador:_
+   ```bash
+   java -cp bin ExecutarValidacoes
+   ```
+   
+   _Ou execute a classe App original:_
+   ```bash
+   java -cp bin App
    ```
 
 ### Executando no VS Code
 
 1. Abra a pasta do projeto no VS Code
 2. Instale a extensão "Extension Pack for Java"
-3. Pressione `F5` para executar o projeto
+3. Abra o arquivo `Principal.java`
+4. Clique no botão "Run" ou pressione `F5`
+
+### 📝 Saída da Execução (Scripts de Validação)
+
+Ao executar `Principal.java`, o sistema executa automaticamente os scripts de validação das Etapas 1 e 2:
+
+```
+╔══════════════════════════════════════════════════════════╗
+║   DESAFIO LABORATÓRIO I - UNISINOS                       ║
+║   Gerenciador de Lojas de Shopping Center               ║
+║   Executando Scripts de Validação                       ║
+╚══════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════
+  VALIDAÇÃO ETAPA 1
+═══════════════════════════════════════════════════════════
+
+[OK] Classe Loja identificada (construtor com dois parâmetros)
+[OK] Classe Loja identificada (construtor com três parâmetros)
+[OK] Método Loja.getNome()
+[OK] Método Loja.setNome()
+[OK] Método Loja.getQuantidadeFuncionarios()
+[OK] Método Loja.setQuantidadeFuncionarios()
+[OK] Método Loja.getSalarioBaseFuncionario()
+[OK] Método Loja.setSalarioBaseFuncionario()
+[OK] Método Loja.toString()
+[OK] Método Loja.gastosComSalario()
+[OK] Método Loja.tamanhoDaLoja()
+
+[OK] Classe Produto identificada
+[OK] Método Produto.setNome()
+[OK] Método Produto.getNome()
+... (continua validando todas as classes)
+
+═══════════════════════════════════════════════════════════
+  VALIDAÇÃO ETAPA 2
+═══════════════════════════════════════════════════════════
+
+[OK] Classe Endereco identificada
+[OK] Classe Data identificada
+[OK] Classe Loja identificada (construtor com dois parâmetros + endereco + data)
+[OK] Método Loja.getEndereco()
+[OK] Método Loja.setEndereco()
+[OK] Método Loja.getDataFundacao()
+[OK] Método Loja.setDataFundacao()
+[OK] Método Produto.setDataValidade()
+[OK] Método Produto.getDataValidade()
+[OK] Método Produto.estaVencido()
+
+╔══════════════════════════════════════════════════════════╗
+║   VALIDAÇÃO CONCLUÍDA COM SUCESSO!                       ║
+╚══════════════════════════════════════════════════════════╝
+```
 
 ---
 
@@ -161,11 +271,21 @@ Representa uma data com validação.
 - [x] Métodos getters e setters para todas as classes
 - [x] Métodos toString() customizados
 
+### ✅ Implementadas (Etapa 2)
+
+- [x] Associação entre classes Loja ↔ Endereco
+- [x] Associação entre classes Loja ↔ Data (fundação)
+- [x] Associação entre classes Produto ↔ Data (validade)
+- [x] Método estaVencido() para verificar validade de produtos
+- [x] Classe ExecutarValidacoes com scripts de validação automática
+- [x] Classe Principal que executa as validações
+- [x] Sistema de validação completo para Etapas 1 e 2
+- [x] Exibição formatada de resultados [OK]/[NOK]
+
 ### 🔜 Próximas Etapas
 
-- [ ] Etapa 2 - Implementação de novas funcionalidades
-- [ ] Etapa 3 - Sistema de relatórios
-- [ ] Etapa 4 - Interface de usuário
+- [ ] Etapa 3 - Herança e Polimorfismo
+- [ ] Etapa 4 - Arrays
 
 ---
 
@@ -184,29 +304,43 @@ Representa uma data com validação.
 
 ---
 
-## 📊 Diagrama de Classes
+## 📊 Diagrama de Classes (Atualizado - Etapa 2)
 
 ```
-┌─────────────────┐     ┌─────────────────┐
-│     Loja        │     │    Produto      │
-├─────────────────┤     ├─────────────────┤
-│ - nome          │     │ - nome          │
-│ - qtdFunc       │     │ - preco         │
-│ - salarioBase   │     └─────────────────┘
-├─────────────────┤
-│ + gastosComSal()│
-│ + tamanhoDaLoja()│
-└─────────────────┘
-
-┌─────────────────┐     ┌─────────────────┐
-│    Endereco     │     │      Data       │
-├─────────────────┤     ├─────────────────┤
-│ - nomeDaRua     │     │ - dia           │
-│ - cidade        │     │ - mes           │
-│ - estado        │     │ - ano           │
-│ - pais          │     ├─────────────────┤
-│ - cep           │     │ + verificaBis() │
-│ - numero        │     └─────────────────┘
+        ┌─────────────────────┐
+        │     Principal       │
+        ├─────────────────────┤
+        │ + main()            │
+        └─────────────────────┘
+                 │ cria
+        ┌────────┴────────┐
+        │                 │
+        ▼                 ▼
+┌─────────────────┐  ┌──────────────────┐
+│      Loja       │  │     Produto      │
+├─────────────────┤  ├──────────────────┤
+│ - nome          │  │ - nome           │
+│ - qtdFunc       │  │ - preco          │
+│ - salarioBase   │  │ - dataValidade ◄─┼───┐
+│ - endereco    ◄─┼─┐├──────────────────┤   │
+│ - dataFundacao◄─┼─┤│ + estaVencido()  │   │
+├─────────────────┤ ││└──────────────────┘   │
+│ + gastosComSal()│ ││                       │
+│ + tamanhoDaLoja()│ ││                       │
+└─────────────────┘ ││                       │
+                    ││                       │
+        ┌───────────┘│                       │
+        │            │                       │
+        ▼            ▼                       ▼
+┌─────────────────┐ ┌────────────────────────┐
+│    Endereco     │ │         Data           │
+├─────────────────┤ ├────────────────────────┤
+│ - nomeDaRua     │ │ - dia                  │
+│ - cidade        │ │ - mes                  │
+│ - estado        │ │ - ano                  │
+│ - pais          │ ├────────────────────────┤
+│ - cep           │ │ + verificaAnoBissexto()│
+│ - numero        │ └────────────────────────┘
 │ - complemento   │
 └─────────────────┘
 ```
@@ -246,20 +380,4 @@ Disciplina: Laboratório de Programação I
 
 Semestre: 2023/2
 
-</div>
 
----
-
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-<div align="center">
-
-**⭐ Se este projeto foi útil para você, considere dar uma estrela!**
-
-Desenvolvido com ☕ e 💙 por [JWiltgen](https://github.com/JWiltgen)
-
-</div>
